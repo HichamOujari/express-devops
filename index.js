@@ -16,6 +16,16 @@ if (cluster.isMaster) {
     });
   });
 
+  app.get("/blocking", (req, res) => {
+    let i = 0;
+    while (i < 2000000000) i++;
+    res.status(200).send("blocking");
+  });
+
+  app.get("/non-blocking", (req, res) => {
+    res.status(200).send("non-blocking");
+  });
+
   app.listen(port, () => {
     console.log(`The Application is running in port ${port}`);
   });
