@@ -5,3 +5,4 @@ metadata:
 data:
   host : mysql
   dbName: javatechie
+  port: 8001

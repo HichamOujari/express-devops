@@ -1,6 +1,6 @@
 const express = require("express");
 const app = express();
-const port = 3000;
+const port = process.env.APP_PORT;
 
 const cluster = require("cluster");
 const cpus = require("os").cpus().length;
