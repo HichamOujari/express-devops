@@ -2,6 +2,10 @@ videos :
     - tutorial k8s : https://www.youtube.com/playlist?list=PLVz2XdJiJQxybsyOxK7WFtteH42ayn5i9
     - jenkins : https://youtu.be/w49hcf1tah8
     - k8s : https://youtu.be/ITBuA1DFvdk
+    - ansible :
+    - terraform : 
+    - prometheus : 
+    - full tutorial : 
 
 for install : 
     - brew install minikube
