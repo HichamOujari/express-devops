@@ -1,0 +1,30 @@
+for install : 
+    - brew install minikube
+    - brew install kuebctl
+    - minikube docker-env (from the returned result, re-execute the last tagged line)
+
+for checking setup :
+    - kubectl cluster-info (all running)
+    - minikube status (localhost --> forbidden)
+
+for deploying an app (v1) (deplyment image ready)
+    - go to directory of project
+    - docker build -t image-name:tag 
+    
+for deploy an app (v1) (deployment + service):
+    - kubectl create deployment deployment-name--image-image-name: tag (tag is required)
+    - kubectl expose deployment-name --type-NodePort --port-port
+    - minikube service deployment-name
+
+for deleting :
+    - kubectl delete entity entity-name (eg : kubectl delete deployment deployment-name)
+
+for deploying an app (v2):
+    - image ready
+    - if not : go to directory of project and run (docker build -t image-name:tag)
+    - create yaml file (https://github.com/HichamOujari/express-devops/blob/main/k8s.yaml) kubectl apply -f filePath
+
+for checking deployment :
+    - kuebctl get deployments (n/n)
+    - kubectl get pods (status = running)
+    - kubectl get services (view published services)
