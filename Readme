@@ -32,7 +32,7 @@ for deleting :
 for deploying an app (v2):
     - image ready
     - if not : go to directory of project and run (docker build -t image-name:tag)
-    - create yaml file (https://github.com/HichamOujari/express-devops/blob/main/k8s.yaml) kubectl apply -f filePath
+    - create yaml file (https://github.com/HichamOujari/express-devops/tree/main) kubectl apply -f filePath
 
 for checking deployment :
     - kuebctl get deployments (n/n)

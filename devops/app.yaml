@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ec-deployment
+spec:
+  selector:
+    matchLabels:
+      app: ec-k8s
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: ec-k8s
+    spec:
+      containers:
+        - name: ec-k8s-container
+          image: hichamouja99/ec:4.0
+          ports:
+            - containerPort: 3000
+          env:
+            - name: port
+              valueFrom:
+                configMapKeyRef:
+                  name: config-map
+                  key: port
+            - name: DB_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: config-map
+                  key: DB_NAME
+            - name: DB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: config-map
+                  key: DB_HOST
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: credentials
+                  key: DB_USERNAME
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: credentials
+                  key: DB_PASSWORD
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ec-svc
+spec:
+  selector:
+    app: ec-k8s
+  ports:
+    - protocol: "TCP"
+      port: 3000
+      targetPort: 8001
+  type: NodePort

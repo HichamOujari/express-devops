@@ -18,7 +18,7 @@ spec:
           ports:
             - containerPort: 8080
           env: # Setting Enviornmental Variables
-             - name: APP_PORT # Setting application port from configMap
+            - name: APP_PORT # Setting application port from configMap
               valueFrom:
                 configMapKeyRef:
                   name: db-config
