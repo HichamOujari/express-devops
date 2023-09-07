@@ -5,13 +5,13 @@ echo "\n---------------------------- Push docker image -------------------------
 docker push hichamouja99/ec:4.0
 
 echo "\n-------------------------- Set the configation ------------------------------"
-kubectl apply -f config.yaml
+kubectl apply -f config.yaml --namespace=default
 
 echo "\n---------------------------- Deploy DataBase --------------------------------"
-kubectl apply -f db.yaml
+kubectl apply -f db.yaml --namespace=default
 
 echo "\n------------------------ Waiting DataBase start ------------------------------"
 sleep 60
 
 echo "\n--------------------------- Deploy Application ------------------------------"
-kubectl apply -f app.yaml
+kubectl apply -f app.yaml --namespace=default
