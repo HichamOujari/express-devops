@@ -16,7 +16,7 @@ spec:
         - name: ec-k8s-container
           image: hichamouja99/ec:4.0
           ports:
-            - containerPort: 3000
+            - containerPort: 80
           env:
             - name: port
               valueFrom:
@@ -54,6 +54,24 @@ spec:
     app: ec-k8s
   ports:
     - protocol: "TCP"
-      port: 3000
+      port: 80
       targetPort: 8001
-  type: LoadBalancer
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ec-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+    - host: localhost
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: ec-svc
+                port:
+                  number: 80
