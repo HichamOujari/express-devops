@@ -1,0 +1,126 @@
+---
+# Source: ec/templates/db.yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: ec-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+# Source: ec/templates/app.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: ec-svc
+spec:
+  selector:
+    app: ec
+  ports:
+    - protocol: "TCP"
+      port: 80
+      targetPort: 8001
+---
+# Source: ec/templates/db.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-svc
+spec:
+  selector:
+    app: ec-mysql
+  ports:
+    - protocol: TCP
+      port: 3306
+      targetPort: 3306
+  clusterIP: None
+---
+# Source: ec/templates/app.yaml
+apiVersion: "apps/v1"
+kind: Deployment
+metadata:
+  name: ec-deployment
+spec:
+  selector:
+    matchLabels:
+      app: ec
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: ec
+    spec:
+      containers:
+        - name: ec-container
+          image: hichamouja99/ec:4.0
+          ports:
+            - containerPort: 80
+          env:
+            - name: port
+              value: "8001"
+            - name: DB_NAME
+              value: test
+            - name: DB_HOST
+              value: mysql-svc
+            - name: DB_USERNAME
+              value: root
+            - name: DB_PASSWORD
+              value: root
+---
+# Source: ec/templates/db.yaml
+apiVersion: "apps/v1"
+kind: Deployment
+metadata:
+  name: ecd-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ec-mysql
+  template:
+    metadata:
+      labels:
+        app: ec-mysql
+    spec:
+      containers:
+        - name:  mysql
+          image:  mysql:8.0
+          env:
+            - name: MYSQL_USER
+              value: root
+            - name: MYSQL_ROOT_PASSWORD
+              value: root
+            - name: MYSQL_PASSWORD
+              value: root
+          ports:
+            - containerPort: 3306
+          volumeMounts:
+            - name: mysql-persistent-storage
+              mountPath: /var/lib/mysql
+      volumes:
+        - name: mysql-persistent-storage
+          persistentVolumeClaim:
+            claimName: ec-pvc
+---
+# Source: ec/templates/ingress.yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ec-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+    - host: localhost
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: ec-svc
+                port:
+                  number: 80

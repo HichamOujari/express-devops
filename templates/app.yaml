@@ -1,0 +1,43 @@
+apiVersion: "apps/{{ .Values.Apiversion }}"
+kind: Deployment
+metadata:
+  name: {{ include "ec.name" . }}-deployment
+spec:
+  selector:
+    matchLabels:
+      app: {{ include "ec.name" . }}
+  replicas: {{ .Values.replicaCount }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "ec.name" . }}
+    spec:
+      containers:
+        - name: {{ include "ec.name" . }}-container
+          image: {{ .Values.mainApp.reporitory }}
+          ports:
+            - containerPort: 80
+          env:
+            - name: port
+              value: "{{ .Values.port }}"
+            - name: DB_NAME
+              value: {{ .Values.mysql.db_name }}
+            - name: DB_HOST
+              value: {{ .Values.mysql.name }}-svc
+            - name: DB_USERNAME
+              value: {{ .Values.mysql.db_username }}
+            - name: DB_PASSWORD
+              value: {{ .Values.mysql.db_password }}
+
+---
+apiVersion: {{ .Values.Apiversion }}
+kind: Service
+metadata:
+  name: {{ include "ec.name" . }}-svc
+spec:
+  selector:
+    app: {{ include "ec.name" . }}
+  ports:
+    - protocol: "TCP"
+      port: 80
+      targetPort: {{ .Values.port}}

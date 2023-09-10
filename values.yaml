@@ -1,0 +1,22 @@
+Apiversion: v1
+
+port: "8001"
+replicaCount: 3
+
+mainApp:
+  reporitory: hichamouja99/ec:4.0
+
+mysql:
+  name: mysql
+  repository: mysql:8.0
+  replicaCount: 1
+  db_name: test
+  db_username: mydb-username
+  db_password: mydb-password
+  accessModes: ReadWriteOnce
+  volume: 1Gi
+
+ingress:
+  host: localhost
+  path: /
+  type: Prefix
