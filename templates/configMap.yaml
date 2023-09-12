@@ -6,3 +6,6 @@ data:
 {{- range $key, $value := .Values.env.mainApp }}
   {{ $key }}: "{{ $value }}"
 {{- end }}
+  DB_HOST: "{{ .Values.mysql.name }}-svc"
+  DB_USERNAME: "{{ .Values.mysql.db_username }}"
+  DB_PASSWORD: "{{ .Values.mysql.db_password }}"

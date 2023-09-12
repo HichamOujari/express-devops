@@ -20,14 +20,6 @@ spec:
           envFrom:
             - configMapRef:
                 name: {{ include "ec.name" . }}-back-configmap
-          env:
-            - name: DB_HOST
-              value: {{ .Values.mysql.name }}-svc
-            - name: DB_USERNAME
-              value: {{ .Values.mysql.db_username }}
-            - name: DB_PASSWORD
-              value: {{ .Values.mysql.db_password }}
-
 ---
 apiVersion: {{ .Values.Apiversion }}
 kind: Service
