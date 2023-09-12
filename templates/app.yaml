@@ -6,7 +6,7 @@ spec:
   selector:
     matchLabels:
       app: {{ include "ec.name" . }}
-  replicas: {{ .Values.replicaCount }}
+  replicas: {{ .Values.mainApp.replicaCount }}
   template:
     metadata:
       labels:
@@ -17,11 +17,10 @@ spec:
           image: {{ .Values.mainApp.reporitory }}
           ports:
             - containerPort: 80
+          envFrom:
+            - configMapRef:
+                name: {{ include "ec.name" . }}-back-configmap
           env:
-            - name: port
-              value: "{{ .Values.port }}"
-            - name: DB_NAME
-              value: {{ .Values.mysql.db_name }}
             - name: DB_HOST
               value: {{ .Values.mysql.name }}-svc
             - name: DB_USERNAME
@@ -40,4 +39,4 @@ spec:
   ports:
     - protocol: "TCP"
       port: 80
-      targetPort: {{ .Values.port}}
+      targetPort: {{ .Values.env.mainApp.port}}
