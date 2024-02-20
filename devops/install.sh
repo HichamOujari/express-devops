@@ -1,10 +1,10 @@
 namespace="--namespace=$1"
 
 echo "--------------------------- Build docker image ------------------------------"
-docker build -t hichamouja99/ec:4.0 ../
+#docker build -t hichamouja99/ec:4.0 ../
 
 echo "\n---------------------------- Push docker image ------------------------------"
-docker push hichamouja99/ec:4.0
+#docker push hichamouja99/ec:4.0
 
 echo "\n-------------------------- Set the configation ------------------------------"
 kubectl apply -f config.yaml $namespace
