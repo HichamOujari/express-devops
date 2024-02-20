@@ -50,6 +50,7 @@ kind: Service
 metadata:
   name: ec-svc
 spec:
+  type: NodePort
   selector:
     app: ec-k8s
   ports:
